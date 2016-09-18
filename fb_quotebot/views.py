@@ -197,7 +197,9 @@ def post_facebook_message(fbid,message_text):
 	# response_msg = json.dumps(response_msg_generic)
 	response_msg = json.dumps(response_msg_quickreply)
 	response_msg_img=json.dumps(response_msg_image)
+	response_msg_scoreit=json.dumps(response_msg_score)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_img)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_scoreit)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	
 
