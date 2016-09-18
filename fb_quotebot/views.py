@@ -121,6 +121,30 @@ def post_facebook_message(fbid,message_text):
 	# 			    }
 	# 			  }
 	# 			}
+	score=0
+	response_msg_score = {
+				"recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"template",
+				      "payload":{
+				        "template_type":"generic",
+				        "elements":[
+				          {
+				            "title":"SCORE %d"(score),
+				            "buttons":[
+				              {
+				                "type":"element_share"
+				              }              
+				            ]
+				          }
+				        ]
+				      }
+				    }
+				  }
+	}
 
 	response_msg_image = {
 				"recipient":{
