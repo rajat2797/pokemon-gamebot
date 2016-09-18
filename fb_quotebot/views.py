@@ -27,6 +27,7 @@ def quiz_gen():
 	random.shuffle(pokemon_arr)
 	answer=pokemon_arr[0]
 	options= [i[0] for i in pokemon_arr[1:4]]
+	options.append(answer[0])
 	random.shuffle(options)
 	return dict(answer=answer,options=options)
 
@@ -121,6 +122,21 @@ def post_facebook_message(fbid,message_text):
 	# 			  }
 	# 			}
 
+	response_msg_image = {
+				"recipient":{
+				    "id":"USER_ID"
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"image",
+				      "payload":{
+				        "url":output_text['answer'][1]
+				      }
+				    }
+				  }
+
+	}
+
 	response_msg_quickreply = {
 				"recipient":{
 				    "id":fbid
@@ -130,7 +146,7 @@ def post_facebook_message(fbid,message_text):
 				    "quick_replies":[
 				      {
 				        "content_type":"text",
-				        "title":output_text['answer'],
+				        "title":output_text['options'][3],
 				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
 				      },
 				      {
@@ -156,8 +172,10 @@ def post_facebook_message(fbid,message_text):
 	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
 	# response_msg = json.dumps(response_msg_generic)
 	response_msg = json.dumps(response_msg_quickreply)
-	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-	print status.json()
+	response_msg_img=json.dumps(response_msg_image)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_img)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+	
 
 def logg(message,symbol='-'):
 	print '%s\n %s\n %s\n'%(symbol*10,message,symbol*10)
