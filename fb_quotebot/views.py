@@ -39,7 +39,7 @@ def index(request):
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# output_text = wikisearch(message_text)
-	output_text,output_url,output_image=jokes()
+	# output_text,output_url,output_image=jokes()
 	output_image='http://thecatapi.com/api/images/get?format=src&type=png'
 	output_text_with_button = {
 			  "recipient":{
