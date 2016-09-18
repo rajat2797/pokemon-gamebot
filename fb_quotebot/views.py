@@ -223,6 +223,7 @@ def handle_quickreply(fbid,payload):
 	a,b=payload.split(':')
 	if a==b:
 		logg('CORRECT','-YES-')
+		global score
 		score+=1
 		output_text='Correct Answer'
 	else:
