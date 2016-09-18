@@ -171,22 +171,22 @@ def post_facebook_message(fbid,message_text):
 				      {
 				        "content_type":"text",
 				        "title":output_text['options'][3],
-				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				        "payload":"%s:%s"%(output_text['options'][3],output_text['answer'][0])
 				      },
 				      {
 				        "content_type":"text",
 				        "title":output_text['options'][1],
-				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				        "payload":"%s:%s"%(output_text['options'][1],output_text['answer'][0])
 				      },
 				      {
 				        "content_type":"text",
 				        "title":output_text['options'][2],
-				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				        "payload":"%s:%s"%(output_text['options'][2],output_text['answer'][0])
 				      },
 				      {
 				        "content_type":"text",
 				        "title":output_text['options'][0],
-				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
+				        "payload":"%s:%s"%(output_text['options'][0],output_text['answer'][0])
 				      }
 				    ]
 				  }
@@ -198,8 +198,6 @@ def post_facebook_message(fbid,message_text):
 	response_msg = json.dumps(response_msg_quickreply)
 	response_msg_img=json.dumps(response_msg_image)
 	response_msg_scoreit=json.dumps(response_msg_score)
-	if response_msg == output_text['answer'][0]:
-		logg("!!!!!!!!!!CORRECT!!!!!!!!!!!!!!!!!!",symbol='!!!')
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_img)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_scoreit)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
@@ -216,10 +214,17 @@ def handle_postback(fbid,payload):
 	post_facebook_message(fbid,payload)
 
 def handle_quickreply(fbid,payload):
+	if not payload:
+		return
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"output_text"}})
 	# status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	logg(payload,symbol='-------QR----')
+	a,b=payload.split(':')
+	if a==b:
+		logg('CORRECT','-YES-')
+	else:
+		logg('WRONG','-NO-')
 	return
 
 class MyChatBotView(generic.View):
