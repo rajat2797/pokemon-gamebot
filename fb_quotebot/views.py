@@ -122,29 +122,29 @@ def post_facebook_message(fbid,message_text):
 	# 			    }
 	# 			  }
 	# 			}
-	# response_msg_score = {
-	# 			"recipient":{
-	# 			    "id":fbid
-	# 			  },
-	# 			  "message":{
-	# 			    "attachment":{
-	# 			      "type":"template",
-	# 			      "payload":{
-	# 			        "template_type":"generic",
-	# 			        "elements":[
-	# 			          {
-	# 			            "title":"SCORE : %d"%(score),
-	# 			            "buttons":[
-	# 			              {
-	# 			                "type":"element_share"
-	# 			              }              
-	# 			            ]
-	# 			          }
-	# 			        ]
-	# 			      }
-	# 			    }
-	# 			  }
-	# }
+	response_msg_score = {
+				"recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"template",
+				      "payload":{
+				        "template_type":"generic",
+				        "elements":[
+				          {
+				            "title":"SCORE : %d"%(score),
+				            "buttons":[
+				              {
+				                "type":"element_share"
+				              }              
+				            ]
+				          }
+				        ]
+				      }
+				    }
+				  }
+	}
 
 	response_msg_image = {
 				"recipient":{
@@ -197,9 +197,9 @@ def post_facebook_message(fbid,message_text):
 	# response_msg = json.dumps(response_msg_generic)
 	response_msg = json.dumps(response_msg_quickreply)
 	response_msg_img=json.dumps(response_msg_image)
-	# response_msg_scoreit=json.dumps(response_msg_score)
+	response_msg_scoreit=json.dumps(response_msg_score)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_img)
-	# requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_scoreit)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_scoreit)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	
 
@@ -223,7 +223,7 @@ def handle_quickreply(fbid,payload):
 	a,b=payload.split(':')
 	if a==b:
 		logg('CORRECT','-YES-')
-		# score+=1
+		score+=1
 		output_text='Correct Answer'
 	else:
 		logg('WRONG','-NO-')
