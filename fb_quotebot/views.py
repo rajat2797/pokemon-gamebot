@@ -38,6 +38,18 @@ def index(request):
 	output_text= quiz_gen()
 	return HttpResponse(output_text['options'],content_type="application/json")
 
+def set_greeting():
+	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
+	response_msg = {
+				"setting_type":"greeting",
+				  "greeting":{
+				    "text":"Pokemon Quiz Bot"
+				  }
+	}
+	response_msg = json.dumps(response_msg)
+	status=requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+	logg(status.text,'---GR---')
+
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# output_text = wikisearch(message_text)
