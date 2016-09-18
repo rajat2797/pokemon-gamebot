@@ -223,8 +223,12 @@ def handle_quickreply(fbid,payload):
 	a,b=payload.split(':')
 	if a==b:
 		logg('CORRECT','-YES-')
+		output_text='Correct Answer'
 	else:
 		logg('WRONG','-NO-')
+		output_text='Wrong Answer'
+	response_msg=response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"output_text"}})
+	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	return
 
 class MyChatBotView(generic.View):
@@ -249,6 +253,7 @@ class MyChatBotView(generic.View):
 				try:
 					if 'postback' in message:
 						handle_postback(message['sender']['id'],message['postback']['payload'])
+						return HttpResponse()
 					else:
 						pass
 				except Exception, e:
@@ -258,6 +263,7 @@ class MyChatBotView(generic.View):
 					if 'quick_reply' in message['message']:
 						# logg(message['message']['quick_reply']['payload'],symbol='--------------avnaua------------')
 						handle_quickreply(message['sender']['id'],message['message']['quick_reply']['payload'])
+						return HttpResponse()
 					else:
 						pass
 				except Exception, e:
