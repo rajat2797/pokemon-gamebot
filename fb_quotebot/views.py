@@ -33,92 +33,92 @@ def index(request):
 	# print type(request.GET)
 	# t = request.GET.get('text') or 'foo'
 	output_text= quiz_gen()
-
 	return HttpResponse(output_text['options'],content_type="application/json")
 
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# output_text = wikisearch(message_text)
 	# output_text,output_url,output_image=jokes()
-	output_image='http://thecatapi.com/api/images/get?format=src&type=png'
-	output_text_with_button = {
-			  "recipient":{
-			    "id":fbid
-			  },
-			  "message":{
-			    "attachment":{
-			      "type":"template",
-			      "payload":{
-			        "template_type":"button",
-			        "text":output_text,
-			        "buttons":[
-			          {
-			            "type":"web_url",
-			            "url": output_url,
-			            "title":"Show Website"
-			          },
-			          {
-			            "type":"postback",
-			            "title":"Another Joke",
-			            "payload":"USER_DEFINED_PAYLOAD"
-			          }
-			        ]
-			      }
-			    }
-			  }
-			}
+	# output_image='http://thecatapi.com/api/images/get?format=src&type=png'
+	# output_text=quiz_gen()
+	# output_text_with_button = {
+	# 		  "recipient":{
+	# 		    "id":fbid
+	# 		  },
+	# 		  "message":{
+	# 		    "attachment":{
+	# 		      "type":"template",
+	# 		      "payload":{
+	# 		        "template_type":"button",
+	# 		        "text":output_text,
+	# 		        "buttons":[
+	# 		          {
+	# 		            "type":"web_url",
+	# 		            "url": output_url,
+	# 		            "title":"Show Website"
+	# 		          },
+	# 		          {
+	# 		            "type":"postback",
+	# 		            "title":"Another Joke",
+	# 		            "payload":"USER_DEFINED_PAYLOAD"
+	# 		          }
+	# 		        ]
+	# 		      }
+	# 		    }
+	# 		  }
+	# 		}
 
-	response_msg_generic = {
-				  "recipient":{
-				    "id":fbid
-				  },
-				  "message":{
-				    "attachment":{
-				      "type":"template",
-				      "payload":{
-				        "template_type":"generic",
-				        "elements":[
-				          {
-				            "title":output_text,
-				            "item_url":output_url,
-				            "image_url":output_image,
-				            "subtitle":output_text,
-				            "buttons":[
-				              {
-				                "type":"web_url",
-				                "url":output_url,
-				                "title":"View Website"
-				              },
-				              {
-				                "type":"postback",
-				                "title":"Another Joke",
-				                "payload":"DEVELOPER_DEFINED_PAYLOAD"
-				              }              
-				            ]
-				          },
-				          {
-				            "title":output_text,
-				            "item_url":output_url,
-				            "image_url":output_image,
-				            "subtitle":output_text,
-				            "buttons":[
-				              {
-				                "type":"web_url",
-				                "url":output_url,
-				                "title":"View Website"
-				              },
-				              {
-				                "type":"postback",
-				                "title":"Another Joke",
-				                "payload":"DEVELOPER_DEFINED_PAYLOAD"
-				              }              
-				            ]
-				          }
-				        ]
-				      }
-				    }
-				  }
-				}
+	# response_msg_generic = {
+	# 			  "recipient":{
+	# 			    "id":fbid
+	# 			  },
+	# 			  "message":{
+	# 			    "attachment":{
+	# 			      "type":"template",
+	# 			      "payload":{
+	# 			        "template_type":"generic",
+	# 			        "elements":[
+	# 			          {
+	# 			            "title":output_text,
+	# 			            "item_url":output_url,
+	# 			            "image_url":output_image,
+	# 			            "subtitle":output_text,
+	# 			            "buttons":[
+	# 			              {
+	# 			                "type":"web_url",
+	# 			                "url":output_url,
+	# 			                "title":"View Website"
+	# 			              },
+	# 			              {
+	# 			                "type":"postback",
+	# 			                "title":"Another Joke",
+	# 			                "payload":"DEVELOPER_DEFINED_PAYLOAD"
+	# 			              }              
+	# 			            ]
+	# 			          },
+	# 			          {
+	# 			            "title":output_text,
+	# 			            "item_url":output_url,
+	# 			            "image_url":output_image,
+	# 			            "subtitle":output_text,
+	# 			            "buttons":[
+	# 			              {
+	# 			                "type":"web_url",
+	# 			                "url":output_url,
+	# 			                "title":"View Website"
+	# 			              },
+	# 			              {
+	# 			                "type":"postback",
+	# 			                "title":"Another Joke",
+	# 			                "payload":"DEVELOPER_DEFINED_PAYLOAD"
+	# 			              }              
+	# 			            ]
+	# 			          }
+	# 			        ]
+	# 			      }
+	# 			    }
+	# 			  }
+	# 			}
 
 	response_msg_quickreply = {
 				"recipient":{
