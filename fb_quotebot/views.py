@@ -133,7 +133,7 @@ def post_facebook_message(fbid,message_text):
 				        "template_type":"generic",
 				        "elements":[
 				          {
-				            "title":"SCORE %d"(score),
+				            "title":"SCORE : %d"%(score),
 				            "buttons":[
 				              {
 				                "type":"element_share"
