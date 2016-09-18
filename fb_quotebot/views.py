@@ -159,7 +159,12 @@ def handle_postback(fbid,payload):
 	logg(payload,symbol='*')
 	post_facebook_message(fbid,payload)
 
-
+def handle_quickreply(fbid,payload):
+	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
+	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"output_text"}})
+	# status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+	logg(payload,symbol='-------QR----')
+	return
 
 class MyChatBotView(generic.View):
 	def get (self, request, *args, **kwargs):
@@ -187,6 +192,16 @@ class MyChatBotView(generic.View):
 						pass
 				except Exception, e:
 					logg(e,symbol='-140-')
+
+				try:
+					if 'quick_reply' in message:
+						handle_quickreply(message['sender']['id'],message['quick_reply']['payload'])
+					else:
+						pass
+				except Exception, e:
+					logg(e,symbol='-140-')
+
+
 				try:
 					sender_id = message['sender']['id']
 					message_text = message['message']['text']
