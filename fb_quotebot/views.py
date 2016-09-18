@@ -41,7 +41,7 @@ def post_facebook_message(fbid,message_text):
 	# output_text = wikisearch(message_text)
 	# output_text,output_url,output_image=jokes()
 	# output_image='http://thecatapi.com/api/images/get?format=src&type=png'
-	# output_text=quiz_gen()
+	output_text=quiz_gen()
 	# output_text_with_button = {
 	# 		  "recipient":{
 	# 		    "id":fbid
@@ -126,16 +126,26 @@ def post_facebook_message(fbid,message_text):
 				    "id":fbid
 				  },
 				  "message":{
-				    "text":"Pick a color:",
+				    "text":"Who is this Pokemon?",
 				    "quick_replies":[
 				      {
 				        "content_type":"text",
-				        "title":"Red",
+				        "title":output_text['answer'],
 				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
 				      },
 				      {
 				        "content_type":"text",
-				        "title":"Green",
+				        "title":output_text['options'][1],
+				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				      },
+				      {
+				        "content_type":"text",
+				        "title":output_text['options'][2],
+				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				      },
+				      {
+				        "content_type":"text",
+				        "title":output_text['options'][0],
 				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
 				      }
 				    ]
