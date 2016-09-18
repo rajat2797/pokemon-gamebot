@@ -195,7 +195,7 @@ class MyChatBotView(generic.View):
 
 				try:
 					if 'quick_reply' in message['message']:
-						logg(message['message']['quick_reply']['payload'],symbol='--------------avnaua------------')
+						# logg(message['message']['quick_reply']['payload'],symbol='--------------avnaua------------')
 						handle_quickreply(message['sender']['id'],message['message']['quick_reply']['payload'])
 					else:
 						pass
