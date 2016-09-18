@@ -11,6 +11,7 @@ import json
 import re
 import random
 import pprint
+import requests
 
 # Create your views here.
 
@@ -25,7 +26,7 @@ def quiz_gen():
 		pokemon_arr.append([k,v])
 	random.shuffle(pokemon_arr)
 	answer=pokemon_arr[0]
-	options= [ i[0] for i in pokemon_arr[1:4]]
+	options= [i[0] for i in pokemon_arr[1:4]]
 	random.shuffle(options)
 	return dict(answer=answer,options=options)
 
