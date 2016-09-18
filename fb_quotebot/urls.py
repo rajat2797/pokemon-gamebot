@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
-from chatbot.views import MyChatBotView, index
+from fb_quotebot.views import MyChatBotView, index
 
 urlpatterns = patterns('',
     # Examples:

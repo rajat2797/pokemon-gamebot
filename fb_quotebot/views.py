@@ -12,6 +12,7 @@ import json
 import requests
 import re
 import random
+import pprint
 
 # Create your views here.
 
@@ -28,8 +29,14 @@ def quiz_gen():
 	answer=pokemon_arr[0]
 	options= [ i[0] for i in pokemon_arr[1:4]]
 	random.shuffle(options)
-
 	return dict(answer=answer,options=options)
+
+def index(request):
+	# print type(request.GET)
+	# t = request.GET.get('text') or 'foo'
+	output_text= quiz_gen()
+
+	return HttpResponse(output_text['options'],content_type="application/json")
 
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
@@ -115,9 +122,31 @@ def post_facebook_message(fbid,message_text):
 				  }
 				}
 
+	response_msg_quickreply = {
+				"recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "text":"Pick a color:",
+				    "quick_replies":[
+				      {
+				        "content_type":"text",
+				        "title":"Red",
+				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_RED"
+				      },
+				      {
+				        "content_type":"text",
+				        "title":"Green",
+				        "payload":"DEVELOPER_DEFINED_PAYLOAD_FOR_PICKING_GREEN"
+				      }
+				    ]
+				  }
+	}
+
 	# response_msg = json.dumps(output_text_with_button)
 	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
-	response_msg = json.dumps(response_msg_generic)
+	# response_msg = json.dumps(response_msg_generic)
+	response_msg = json.dumps(response_msg_quickreply)
 	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	print status.json()
 
@@ -170,10 +199,3 @@ class MyChatBotView(generic.View):
 
 		return HttpResponse()  
 
-def index(request):
-	# print type(request.GET)
-	# t = request.GET.get('text') or 'foo'
-	post_facebook_message('1123','hi')
-	handle_postback('5564','hi')
-	logg('asd','+')
-	return HttpResponse('hello')
