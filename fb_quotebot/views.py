@@ -65,8 +65,7 @@ def search_colour(text):
 	for colour in colour_arr:
 		if text.lower() in colour['colour_name'].lower():
 			return colour
-	random.shuffle(colour_arr)
-	return colour_arr[0]
+	return colour_arr[random.randint(0,len(colour_arr))-1]
 
 def set_greeting():
 	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
