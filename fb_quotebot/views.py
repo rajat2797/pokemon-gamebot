@@ -296,7 +296,7 @@ class MyChatBotView(generic.View):
 				try:
 					if 'postback' in message:
 						handle_postback(message['sender']['id'],message['postback']['payload'])
-						# return HttpResponse()
+						return HttpResponse()
 					else:
 						pass
 				except Exception, e:
@@ -306,7 +306,7 @@ class MyChatBotView(generic.View):
 					if 'quick_reply' in message['message']:
 						# logg(message['message']['quick_reply']['payload'],symbol='--------------avnaua------------')
 						handle_quickreply(message['sender']['id'],message['message']['quick_reply']['payload'])
-						return HttpResponse()
+						# return HttpResponse()
 					else:
 						pass
 				except Exception, e:
