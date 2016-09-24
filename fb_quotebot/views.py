@@ -83,7 +83,7 @@ def set_greeting():
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	matching_colour = search_colour(message_text)
-	image_url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'],matching_colour['colour_hex'])
+	image_url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'][1:],matching_colour['colour_hex'][1:])
 	print image_url
 	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
 	response_msg_image = {
