@@ -37,7 +37,7 @@ def index(request):
 	# t = request.GET.get('text') or 'foo'
 	output_text= quiz_gen()
 	# return HttpResponse(output_text['options'],content_type="application/json")
-	return HttpResponse(giphy('YES,good'))
+	return HttpResponse(scrape_spreadsheet())
 
 def giphy(search_query):
 	url='http://api.giphy.com/v1/gifs/search?q=%s&api_key=dc6zaTOxFJmzC'%(search_query)
@@ -47,6 +47,22 @@ def giphy(search_query):
 	i = random.randint(0,l)
 	return data['data'][i]['images']['fixed_height']['url']
 
+def scrape_spreadsheet():
+	url = 'https://spreadsheets.google.com/feeds/list/1FChO1iS-SnEw9a3JUnUT1ZInLfCaETpvYb7Y_2egOq0/od6/public/values?alt=json'
+	resp=requests.get(url=url).text
+	data=json.loads(resp)
+	arr=[]
+	for entry in data['feed']['entry']:	
+		print entry['gsx$name']['$t']
+		d=dict(colour_name=entry['gsx$name']['$t'],colour_hex=entry['gsx$colour1']['$t'])
+		arr.append(d)
+	# although it would be better to create a json object and then return it as it will be fast
+	return arr
+
+def search_colour(text):
+	for colour in scrape_spreadsheet():
+		if text in colour['colour_name']:
+			return colour
 
 def set_greeting():
 	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
@@ -61,6 +77,12 @@ def set_greeting():
 	logg(status.text,'---GR---')
 
 def post_facebook_message(fbid,message_text):
+	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
+	output_text = search_colour(message_text)
+	response_msg = json.dumps(output_text)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+
+def post_facebook_message_old(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# output_text = wikisearch(message_text)
 	# output_text,output_url,output_image=jokes()
@@ -220,11 +242,14 @@ def post_facebook_message(fbid,message_text):
 	response_msg = json.dumps(response_msg_quickreply)
 	response_msg_img=json.dumps(response_msg_image)
 	response_msg_scoreit=json.dumps(response_msg_score)
+	
+	# output_text = search_colour(message_text)
+	
+	# response_msg = json.dumps(output_text)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_img)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_scoreit)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	
-
 def logg(message,symbol='-'):
 	print '%s\n %s\n %s\n'%(symbol*10,message,symbol*10)
 
