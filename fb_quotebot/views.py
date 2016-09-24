@@ -87,6 +87,32 @@ def post_facebook_message(fbid,message_text):
 	image_url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'][1:],matching_colour['colour_hex'][1:])
 	print image_url
 	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
+	response_msg_generic = {
+				  "recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"template",
+				      "payload":{
+				        "template_type":"generic",
+				        "elements":[
+				          {
+				            "title":matching_colour['colour_name'],
+				            "item_url":'https://api.chucknorris.io',
+				            "image_url":image_url,
+				            "subtitle":'HE HE',
+				            "buttons":[
+				              {
+				                "type":"element_share",
+				              }
+				             ]
+				          }              
+				         ]
+				       }
+				  }
+				}
+			}
 	response_msg_image = {
 				"recipient":{
 				    "id":fbid
@@ -104,8 +130,10 @@ def post_facebook_message(fbid,message_text):
 
 	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
 	response_msg_image = json.dumps(response_msg_image)
+	response_msg_generic = json.dumps(response_msg_generic)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_image)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_generic)
 
 def post_facebook_message_old(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
