@@ -54,7 +54,7 @@ def scrape_spreadsheet():
 	data=json.loads(resp)
 	arr=[]
 	for entry in data['feed']['entry']:	
-		print entry['gsx$name']['$t']
+		# print entry['gsx$name']['$t']
 		d=dict(colour_name=entry['gsx$name']['$t'],colour_hex=entry['gsx$colour1']['$t'])
 		arr.append(d)
 	# although it would be better to create a json object and then return it as it will be fast
@@ -66,7 +66,7 @@ def search_colour(text):
 		if text in colour['colour_name']:
 			return colour
 	random.shuffle(colour_arr)
-	return colour_arr[0]['colour_name']
+	return colour_arr[0]
 
 def set_greeting():
 	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
@@ -83,6 +83,7 @@ def set_greeting():
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	matching_colour = search_colour(message_text)
+	url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'],matching_colour['colour_hex'])
 	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
 	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
