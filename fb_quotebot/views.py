@@ -43,27 +43,6 @@ def giphy(search_query):
 	i = random.randint(0,l)
 	return data['data'][i]['images']['fixed_height']['url']
 
-def scrape_spreadsheet():
-	url = 'https://spreadsheets.google.com/feeds/list/1FChO1iS-SnEw9a3JUnUT1ZInLfCaETpvYb7Y_2egOq0/od6/public/values?alt=json'
-	resp=requests.get(url=url).text
-	data=json.loads(resp)
-	arr=[]
-	for entry in data['feed']['entry']:	
-		# print entry['gsx$name']['$t']
-		d=dict(colour_name=entry['gsx$name']['$t'],colour_hex=entry['gsx$colour1']['$t'])
-		arr.append(d)
-	# although it would be better to create a json object and then return it as it will be fast
-	return arr
-
-def search_colour(text):
-	colour_arr=scrape_spreadsheet()
-	for colour in colour_arr:
-		if text.lower() in colour['colour_name'].lower():
-			return colour
-	num=random.randint(0,len(colour_arr)-1)
-	print "***************%d****************"%(num)
-	return colour_arr[num]
-
 def set_greeting():
 	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
 	response_msg = {
@@ -77,60 +56,6 @@ def set_greeting():
 	logg(status.text,'---GR---')
 
 def post_facebook_message(fbid,message_text):
-	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
-	matching_colour = search_colour(message_text)
-	image_url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'][1:],matching_colour['colour_hex'][1:])
-	print image_url
-	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
-	response_msg_generic = {
-				  "recipient":{
-				    "id":fbid
-				  },
-				  "message":{
-				    "attachment":{
-				      "type":"template",
-				      "payload":{
-				        "template_type":"generic",
-				        "elements":[
-				          {
-				            "title":matching_colour['colour_name'],
-				            "item_url":'https://api.chucknorris.io',
-				            "image_url":image_url,
-				            "subtitle":'HE HE',
-				            "buttons":[
-				              {
-				                "type":"element_share",
-				              }
-				             ]
-				          }              
-				         ]
-				       }
-				  }
-				}
-			}
-	response_msg_image = {
-				"recipient":{
-				    "id":fbid
-				  },
-				  "message":{
-				    "attachment":{
-				      "type":"image",
-				      "payload":{
-				        "url":image_url
-				      }
-				    }
-				  }
-
-	}
-
-	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
-	response_msg_image = json.dumps(response_msg_image)
-	response_msg_generic = json.dumps(response_msg_generic)
-	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
-	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_image)
-	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_generic)
-
-def post_facebook_message_old(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	# output_text = wikisearch(message_text)
 	# output_text,output_url,output_image=jokes()
@@ -302,9 +227,6 @@ def logg(message,symbol='-'):
 	print '%s\n %s\n %s\n'%(symbol*10,message,symbol*10)
 
 def handle_postback(fbid,payload):
-	# post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
-	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"output_text"}})
-	# status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	logg(payload,symbol='*')
 	post_facebook_message(fbid,payload)
 
@@ -312,8 +234,6 @@ def handle_quickreply(fbid,payload):
 	if not payload:
 		return
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
-	# response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":"output_text"}})
-	# status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 	logg(payload,symbol='-------QR----')
 	a,b=payload.split(':')
 	if a==b:
