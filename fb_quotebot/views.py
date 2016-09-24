@@ -35,9 +35,10 @@ def quiz_gen():
 def index(request):
 	# print type(request.GET)
 	# t = request.GET.get('text') or 'foo'
-	output_text= quiz_gen()
+	colour=request.GET['text']
+	# output_text= quiz_gen()
 	# return HttpResponse(output_text['options'],content_type="application/json")
-	return HttpResponse(scrape_spreadsheet())
+	return HttpResponse(search_colour(colour))
 
 def giphy(search_query):
 	url='http://api.giphy.com/v1/gifs/search?q=%s&api_key=dc6zaTOxFJmzC'%(search_query)
@@ -60,9 +61,12 @@ def scrape_spreadsheet():
 	return arr
 
 def search_colour(text):
-	for colour in scrape_spreadsheet():
+	colour_arr=scrape_spreadsheet()
+	for colour in colour_arr:
 		if text in colour['colour_name']:
 			return colour
+	random.shuffle(colour_arr)
+	return colour_arr[0]['colour_name']
 
 def set_greeting():
 	post_message_url = "https://graph.facebook.com/v2.6/me/thread_settings?access_token%s"%PAGE_ACCESS_TOKEN
