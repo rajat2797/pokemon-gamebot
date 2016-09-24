@@ -37,7 +37,7 @@ def index(request):
 	# t = request.GET.get('text') or 'foo'
 	output_text= quiz_gen()
 	# return HttpResponse(output_text['options'],content_type="application/json")
-	return HttpResponse(giphy('funny+cat'))
+	return HttpResponse(giphy('YES,good'))
 
 def giphy(search_query):
 	url='http://api.giphy.com/v1/gifs/search?q=%s&api_key=dc6zaTOxFJmzC'%(search_query)
@@ -243,26 +243,33 @@ def handle_quickreply(fbid,payload):
 	a,b=payload.split(':')
 	if a==b:
 		logg('CORRECT','-YES-')
-		global score
-		score+=1
+		# global score
+		# score+=1
 		output_text='Correct Answer'
+		giphy_image_url = giphy('YES,correct,good')
 	else:
 		logg('WRONG','-NO-')
 		output_text='Wrong Answer'
-	response_msg = {
-			"recipient":{
-			    "id":fbid
-			  },
-			  "message":{
-			    "attachment":{
-			      "type":"image",
-			      "payload":{
-			        "url":giphy('funny+cat')
-			      }
-			    }
-			  }
+		giphy_image_url = giphy('NO,wrong,bad')
+
+	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
+	response_image_msg = {
+				"recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"image",
+				      "payload":{
+				        "url": giphy_image_url
+				      }
+				    }
+				  }
 	}
+
+	response_image_msg = json.dumps(response_image_msg)
 	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+	status = requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_image_msg)
 	# return
 
 class MyChatBotView(generic.View):
