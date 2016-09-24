@@ -43,7 +43,9 @@ def giphy(search_query):
 	url='http://api.giphy.com/v1/gifs/search?q=%s&api_key=dc6zaTOxFJmzC'%(search_query)
 	resp=requests.get(url=url).text
 	data=json.loads(resp)
-	return data['data'][0]['images']['fixed_height']['url']
+	l = len(data['data'])
+	i = random.randint(0,l)
+	return data['data'][i]['images']['fixed_height']['url']
 
 
 def set_greeting():
