@@ -63,7 +63,7 @@ def scrape_spreadsheet():
 def search_colour(text):
 	colour_arr=scrape_spreadsheet()
 	for colour in colour_arr:
-		if text in colour['colour_name']:
+		if text.lower() in colour['colour_name'].lower():
 			return colour
 	random.shuffle(colour_arr)
 	return colour_arr[0]
