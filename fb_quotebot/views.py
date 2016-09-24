@@ -83,10 +83,25 @@ def set_greeting():
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
 	matching_colour = search_colour(message_text)
-	url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'],matching_colour['colour_hex'])
+	image_url = 'https://dummyimage.com/100x100/%s/%s.png'%(matching_colour['colour_hex'],matching_colour['colour_hex'])
 	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
+	response_msg_image = {
+				"recipient":{
+				    "id":fbid
+				  },
+				  "message":{
+				    "attachment":{
+				      "type":"image",
+				      "payload":{
+				        "url":image_url
+				      }
+				    }
+				  }
+
+	}
 	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
+	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg_image)
 
 def post_facebook_message_old(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
