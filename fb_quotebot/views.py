@@ -78,8 +78,9 @@ def set_greeting():
 
 def post_facebook_message(fbid,message_text):
 	post_message_url = 'https://graph.facebook.com/v2.6/me/messages?access_token=%s'%PAGE_ACCESS_TOKEN
-	output_text = search_colour(message_text)
-	response_msg = json.dumps(output_text)
+	matching_colour = search_colour(message_text)
+	output_text = '%s : %s'%(matching_colour['colour_name'],matching_colour['colour_hex'])
+	response_msg = json.dumps({"recipient":{"id":fbid}, "message":{"text":output_text}})
 	requests.post(post_message_url, headers={"Content-Type": "application/json"},data=response_msg)
 
 def post_facebook_message_old(fbid,message_text):
